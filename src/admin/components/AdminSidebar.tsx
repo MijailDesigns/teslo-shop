@@ -12,23 +12,30 @@ import {
   ChevronRight,
 } from "lucide-react";
 import CustomLogo from "@/components/custom/CustomLogo";
+import { Link, useLocation } from "react-router";
 
 interface SidebarProps {
   isCollapsed: boolean;
   onToggle: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
+const AdminSidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
+  const { pathname } = useLocation();
+
   const menuItems = [
-    { icon: Home, label: "Dashboard", active: true },
-    { icon: BarChart3, label: "Analytics" },
-    { icon: Users, label: "Users" },
-    { icon: ShoppingCart, label: "Orders" },
-    { icon: FileText, label: "Reports" },
-    { icon: Bell, label: "Notifications" },
-    { icon: Settings, label: "Settings" },
-    { icon: HelpCircle, label: "Help" },
+    { icon: Home, label: "Dashboard", to: "/admin" },
+    { icon: BarChart3, label: "Productos", to: "/admin/products" },
+    { icon: Users, label: "Usuarios" },
+    { icon: ShoppingCart, label: "Ordenes" },
+    { icon: FileText, label: "Reportes" },
+    { icon: Bell, label: "Notificationes" },
+    { icon: Settings, label: "Ajustes" },
+    { icon: HelpCircle, label: "Ayuda" },
   ];
+
+  const isActiveRouter = (to: string) => {
+    return pathname === to;
+  };
 
   return (
     <div
@@ -54,10 +61,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
             const Icon = item.icon;
             return (
               <li key={index}>
-                <a
-                  href="#"
+                <Link
+                  to={item.to || "/admin"}
                   className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 group ${
-                    item.active
+                    isActiveRouter(item.to || "/xxxx")
                       ? "bg-blue-50 text-blue-600 border-r-2 border-blue-600"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   }`}
@@ -66,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
                   {!isCollapsed && (
                     <span className="font-medium">{item.label}</span>
                   )}
-                </a>
+                </Link>
               </li>
             );
           })}
@@ -93,4 +100,4 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
   );
 };
 
-export default Sidebar;
+export default AdminSidebar;
