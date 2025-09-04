@@ -18,6 +18,8 @@ const useProducts = () => {
   let minPrice = undefined;
   let maxPrice = undefined;
 
+  const query = searchParams.get("query") || undefined;
+
   switch (price) {
     case "any":
       break;
@@ -44,7 +46,7 @@ const useProducts = () => {
   return useQuery({
     queryKey: [
       "products",
-      { offset, limit, gender, sizes, minPrice, maxPrice },
+      { offset, limit, gender, sizes, minPrice, maxPrice, query },
     ],
     queryFn: () =>
       getProductsAction({
@@ -54,6 +56,7 @@ const useProducts = () => {
         sizes,
         minPrice,
         maxPrice,
+        query,
       }),
     staleTime: 1000 * 60 * 5,
   });
