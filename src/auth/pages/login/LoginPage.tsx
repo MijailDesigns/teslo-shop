@@ -5,12 +5,13 @@ import { Label } from "@/components/ui/label";
 import CustomLogo from "@/components/custom/CustomLogo";
 import { Link, useNavigate } from "react-router";
 import { useState, type FormEvent } from "react";
-import { loginAction } from "@/auth/actions/login.action";
 import { toast } from "sonner";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [isPosting, setIsPosting] = useState(false);
+  const { login } = useAuthStore();
 
   const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -20,14 +21,13 @@ const LoginPage = () => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    try {
-      const data = await loginAction(email, password);
-      localStorage.setItem("token", data.token);
-      console.log("redireccionando...");
+    const isValid = await login(email, password);
+
+    if (isValid) {
       navigate("/");
-    } catch (error) {
-      toast.error("correo o/y contraseña no validos");
+      return;
     }
+    toast.error("correo o/y contraseña no validos");
     setIsPosting(false);
   };
 
