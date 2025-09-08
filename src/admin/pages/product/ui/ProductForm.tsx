@@ -11,11 +11,13 @@ interface Props {
   title: string;
   subTitle: string;
   product: Product;
+  // Methods
+  onSubmit: (productLike: Partial<Product>) => Promise<void>;
 }
 
 const availableSizes: Size[] = ["XS", "S", "M", "L", "XL", "XXL"];
 
-const ProductForm = ({ title, subTitle, product }: Props) => {
+const ProductForm = ({ title, subTitle, product, onSubmit }: Props) => {
   const [dragActive, setDragActive] = useState(false);
 
   const {
@@ -83,10 +85,6 @@ const ProductForm = ({ title, subTitle, product }: Props) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     console.log(files);
-  };
-
-  const onSubmit = (productLike: Product) => {
-    console.log("onSubmt", productLike);
   };
 
   return (
