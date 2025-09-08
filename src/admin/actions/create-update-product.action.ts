@@ -1,9 +1,11 @@
 import { tesloApi } from "@/api/tesloApi";
 import type { Product } from "@/interfaces/product.interface";
+import { sleep } from "@/lib/sleep";
 
 export const createUpdateProductAction = async (
   productLike: Partial<Product>
 ): Promise<Product> => {
+  await sleep(1000);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, user, images = [], ...rest } = productLike;
 
@@ -13,7 +15,7 @@ export const createUpdateProductAction = async (
   rest.price = Number(rest.price || 0);
 
   const { data } = await tesloApi<Product>({
-    url: isCreating ? "/products" : `/product/${id}`,
+    url: isCreating ? "/products" : `/products/${id}`,
     method: isCreating ? "POST" : "PATCH",
     data: rest,
   });
