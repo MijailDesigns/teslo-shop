@@ -18,7 +18,7 @@ export const getProductByIdAction = async (id: string): Promise<Product> => {
     } as unknown as Product;
   }
 
-  const { data } = await tesloApi.get<Product>(`/product/${id}`);
+  const { data } = await tesloApi.get<Product>(`/products/${id}`);
 
   const images = data.images.map((img) => {
     if (img.includes("http")) return img;
