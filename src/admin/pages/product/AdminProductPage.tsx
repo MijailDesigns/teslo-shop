@@ -12,6 +12,8 @@ const AdminProductPage = () => {
 
   const { isLoading, isError, data: product, mutation } = useProduct(id || "");
 
+  console.log({ mutation: mutation.isPending });
+
   const title = id === "new" ? "Nuevo producto" : "Editar producto";
   const subtitle =
     id === "new"
@@ -51,6 +53,7 @@ const AdminProductPage = () => {
       subTitle={subtitle}
       product={product}
       onSubmit={handleSubmit}
+      isPending={mutation.isPending}
     />
   );
 };
