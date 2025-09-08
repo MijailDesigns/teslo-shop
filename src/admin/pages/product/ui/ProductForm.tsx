@@ -6,7 +6,6 @@ import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { p } from "node_modules/react-router/dist/development/index-react-server-client-DRhjXpk2.d.mts";
 
 interface Props {
   title: string;
@@ -14,10 +13,16 @@ interface Props {
   product: Product;
   isPending: boolean;
   // Methods
-  onSubmit: (productLike: Partial<Product>) => Promise<void>;
+  onSubmit: (
+    productLike: Partial<Product> & { files?: File[] }
+  ) => Promise<void>;
 }
 
 const availableSizes: Size[] = ["XS", "S", "M", "L", "XL", "XXL"];
+
+interface FormInputs extends Product {
+  files?: File[];
+}
 
 const ProductForm = ({
   title,
@@ -35,7 +40,7 @@ const ProductForm = ({
     getValues,
     setValue,
     watch,
-  } = useForm({ defaultValues: product });
+  } = useForm<FormInputs>({ defaultValues: product });
 
   const selectedSizes = watch("sizes");
   const selectedTags = watch("tags");
@@ -92,6 +97,8 @@ const ProductForm = ({
     if (!files) return;
 
     setFiles((prev) => [...prev, ...Array.from(files)]);
+    const currentFiles = getValues("files") || [];
+    setValue("files", [...currentFiles, ...Array.from(files)]);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,6 +108,8 @@ const ProductForm = ({
     if (!files) return;
 
     setFiles((prev) => [...prev, ...Array.from(files)]);
+    const currentFiles = getValues("files") || [];
+    setValue("files", [...currentFiles, ...Array.from(files)]);
   };
 
   return (
