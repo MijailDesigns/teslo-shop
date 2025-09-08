@@ -1,9 +1,11 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProductByIdAction } from "../actions/get-product-by-id.actions";
 import { createUpdateProductAction } from "../actions/create-update-product.action";
 import type { Product } from "@/interfaces/product.interface";
 
 const useProduct = (id: string) => {
+  const queryClient = useQueryClient();
+
   const query = useQuery({
     queryKey: ["product", { id }],
     queryFn: () => getProductByIdAction(id),
@@ -17,16 +19,13 @@ const useProduct = (id: string) => {
     mutationKey: [""],
     mutationFn: createUpdateProductAction,
     onSuccess: (product: Product) => {
-      console.log("todo salio bien", product);
-      // TODO
       // Invalidar cache
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+
       // Actualizar queryData
+      queryClient.setQueryData(["product", { id: product.id }], product);
     },
   });
-
-  // const handleSubmitedForm = async (productLike: Partial<Product>) => {
-  //   console.log({ productLike });
-  // };
 
   return {
     ...query,
